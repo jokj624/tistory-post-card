@@ -7,10 +7,10 @@ Generate beautiful SVG cards for the latest post from any Tistory blog, perfect 
 - Fetches the latest post from a Tistory blog via **RSS**.
 - Renders a stylish SVG card with:
   - Blog title and description
-  - Post title
+  - Recent post title
   - Up to 5 tags
   - Tistory logo and custom styles
-  - **Theme support**: light, dark, or auto (follows user's browser preference)
+  - **Theme support**: light, dark
 - Simple REST API, deployable on Vercel or any Node.js server.
 
 ## Demo
@@ -32,6 +32,8 @@ GET /api/post?name=your-blog-name
 [![example light card](https://tistory-post-card.vercel.app/api/post?name=iot624&theme=light)](https://iot624.tistory.com)
 
 [![example dark card](https://tistory-post-card.vercel.app/api/post?name=iot624&theme=dark)](https://iot624.tistory.com)
+
+- you can use this card ==> `https://tistory-post-card.vercel.app/api/post?name={your-blog-name}&theme={theme}`
 
 ## Getting Started
 
@@ -74,7 +76,7 @@ You can control the color theme of the SVG card using the `theme` query paramete
 **Example:**
 
 ```
-GET /api/post?name=your-blog-name&theme=auto
+GET /api/post?name=your-blog-name
 GET /api/post?name=your-blog-name&theme=dark
 GET /api/post?name=your-blog-name&theme=light
 ```
