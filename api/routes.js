@@ -10,14 +10,22 @@ const utilRss = require('../utils/rss');
 router.get('/post', async (req, res) => {
   const { name, theme } = req.query;
   if (!name) {
-    res.status(400).send({ code: 400, message: 'Blog name is required' });
+    return res
+      .status(400)
+      .send({ code: 400, message: 'Blog name is required' });
+  }
+
+  if (theme && theme !== 'light' && theme !== 'dark') {
+    return res.status(400).send({ code: 400, message: 'Invalid theme' });
   }
 
   const { blogTitle, description, postTitle, postLink, tags } =
     await utilRss.parseRss(`https://${name}.tistory.com/rss`);
 
   if (!postTitle || !postLink) {
-    res.status(404).send({ code: 404, message: 'Not found recent post' });
+    return res
+      .status(404)
+      .send({ code: 404, message: 'Not found recent post' });
   }
   const cardSvg = template.getPostCardSvg(
     postLink,
