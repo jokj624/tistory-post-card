@@ -10,6 +10,7 @@ Generate beautiful SVG cards for the latest post from any Tistory blog, perfect 
   - Post title
   - Up to 5 tags
   - Tistory logo and custom styles
+  - **Theme support**: light, dark, or auto (follows user's browser preference)
 - Simple REST API, deployable on Vercel or any Node.js server.
 
 ## Demo
@@ -55,8 +56,28 @@ The server will start on [http://localhost:8000](http://localhost:8000).
 
 ### API Endpoints
 
-- `GET /api/post?name={tistory_blog_name}`  
+- `GET /api/post?name={tistory_blog_name}&theme={theme}`  
   Returns an SVG card for the latest post of the specified Tistory blog.
+  - `theme` (optional): `light`, `dark`, or `auto` (default: `auto`).
+    - `auto`: The card automatically adapts to the user's browser dark mode setting using CSS media queries.
+    - `dark`: Forces dark mode (white text).
+    - `light`: Forces light mode (black text).
+
+## Theme Support
+
+You can control the color theme of the SVG card using the `theme` query parameter:
+
+- `theme=auto` (default): The card will automatically detect and follow the user's browser dark mode preference. Text and tag colors will switch between black and white accordingly.
+- `theme=dark`: The card will always use dark mode (white text).
+- `theme=light`: The card will always use light mode (black text).
+
+**Example:**
+
+```
+GET /api/post?name=your-blog-name&theme=auto
+GET /api/post?name=your-blog-name&theme=dark
+GET /api/post?name=your-blog-name&theme=light
+```
 
 ## Project Structure
 
