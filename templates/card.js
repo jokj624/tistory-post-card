@@ -6,13 +6,13 @@ exports.getPostCardSvg = (
   description,
   postTitle,
   tags,
-  theme = 'auto', // 'light', 'dark', or 'auto'
+  theme = 'light', // 'light', 'dark'
 ) => `
  <svg
   width="450"
   height="120"
   viewBox="0 0 450 120"
-  fill="none"
+  fill="${theme === 'light' ? 'white' : '#121212'}"
   xmlns="http://www.w3.org/2000/svg">
   <a href='${postLink}'>
   ${this.getStyles(theme)}
@@ -30,41 +30,6 @@ exports.getPostCardSvg = (
 `;
 
 exports.getStyles = (theme) => {
-  if (theme === 'auto') {
-    return `
-<style>
-    @font-face {
-      font-family: 'Pretendard-Regular';
-      src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-      font-weight: 400;
-      font-style: normal;
-    } 
-    text {
-      font-family: 'Pretendard-Regular', sans-serif;
-    }
-    .blog {
-      font-size: 12px;
-      fill: black;
-      opacity: 0.5;
-    }
-    .desc {
-      font-size: 10px;
-      fill: black;
-      opacity: 0.6;
-    }
-    .title {
-      fill: black;
-      font-size: 16px;
-      opacity: 0.8;
-    }
-    @media (prefers-color-scheme: dark) {
-      .blog, .desc, .title {
-        fill: white !important;
-      }
-    }
-  </style>
-`;
-  }
   const isDark = theme === 'dark';
   return `
 <style>
@@ -103,15 +68,15 @@ exports.getTistoryLogoSvg = () => `
    </svg>
 `;
 
-exports.getTagsSvg = (tags, theme = 'light') => {
+exports.getTagsSvg = (tags, theme) => {
   const fontSize = 10;
   const horizontalPadding = 16;
   const spacing = 10;
   const y = 15;
   const height = 22;
+
   let tagTextColor = '#000';
   if (theme === 'dark') tagTextColor = '#fff';
-  if (theme === 'auto') tagTextColor = 'currentColor';
 
   const tagElements = tags.map((tagText) => {
     const approxLength = tagText
