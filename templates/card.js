@@ -6,6 +6,7 @@ exports.getPostCardSvg = (
   description,
   postTitle,
   tags,
+  theme = 'auto', // 'light', 'dark', or 'auto'
 ) => `
  <svg
   width="450"
@@ -14,7 +15,7 @@ exports.getPostCardSvg = (
   fill="none"
   xmlns="http://www.w3.org/2000/svg">
   <a href='${postLink}'>
-  ${this.getStyles()}
+  ${this.getStyles(theme)}
   <rect x="0.5" y="0.5" width="449" height="119" rx="4.5" stroke="#EB531F" />
    <g transform="translate(20,30)" >
     ${this.getTistoryLogoSvg()}
@@ -23,12 +24,14 @@ exports.getPostCardSvg = (
   </text>
   <text x="0" y="30" class="title"> ${postTitle} </text>
   </g>
-  ${this.getTagsSvg(tags)}
+  ${this.getTagsSvg(tags, theme)}
   </a>
  </svg>
 `;
 
-exports.getStyles = () => `
+exports.getStyles = (theme) => {
+  if (theme === 'auto') {
+    return `
 <style>
     @font-face {
       font-family: 'Pretendard-Regular';
@@ -36,11 +39,9 @@ exports.getStyles = () => `
       font-weight: 400;
       font-style: normal;
     } 
-
     text {
       font-family: 'Pretendard-Regular', sans-serif;
     }
-
     .blog {
       font-size: 12px;
       fill: black;
@@ -56,8 +57,44 @@ exports.getStyles = () => `
       font-size: 16px;
       opacity: 0.8;
     }
+    @media (prefers-color-scheme: dark) {
+      .blog, .desc, .title {
+        fill: white !important;
+      }
+    }
   </style>
 `;
+  }
+  const isDark = theme === 'dark';
+  return `
+<style>
+    @font-face {
+      font-family: 'Pretendard-Regular';
+      src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    } 
+    text {
+      font-family: 'Pretendard-Regular', sans-serif;
+    }
+    .blog {
+      font-size: 12px;
+      fill: ${isDark ? 'white' : 'black'};
+      opacity: 0.5;
+    }
+    .desc {
+      font-size: 10px;
+      fill: ${isDark ? 'white' : 'black'};
+      opacity: 0.6;
+    }
+    .title {
+      fill: ${isDark ? 'white' : 'black'};
+      font-size: 16px;
+      opacity: 0.8;
+    }
+  </style>
+`;
+};
 
 exports.getTistoryLogoSvg = () => `
   <svg width="13" height="13" viewBox="0 0 459 459" xmlns="http://www.w3.org/2000/svg"  x="0" y="-11">
@@ -66,12 +103,15 @@ exports.getTistoryLogoSvg = () => `
    </svg>
 `;
 
-exports.getTagsSvg = (tags) => {
+exports.getTagsSvg = (tags, theme = 'light') => {
   const fontSize = 10;
   const horizontalPadding = 16;
   const spacing = 10;
   const y = 15;
   const height = 22;
+  let tagTextColor = '#000';
+  if (theme === 'dark') tagTextColor = '#fff';
+  if (theme === 'auto') tagTextColor = 'currentColor';
 
   const tagElements = tags.map((tagText) => {
     const approxLength = tagText
@@ -103,9 +143,10 @@ exports.getTagsSvg = (tags) => {
         x="${textX}"
         y="${y + 14}"
         font-size="${fontSize}"
-        fill="#000"
+        fill="${tagTextColor}"
         font-family="Pretendard-Regular, sans-serif"
         text-anchor="middle"
+        class="tag-text"
       >${tagText}</text>
     `;
 
@@ -113,5 +154,8 @@ exports.getTagsSvg = (tags) => {
   });
 
   tagSvg += `</g>`;
+  if (theme === 'auto') {
+    tagSvg += `<style>@media (prefers-color-scheme: dark) { .tag-text { fill: #fff !important; } }</style>`;
+  }
   return tagSvg;
 };
