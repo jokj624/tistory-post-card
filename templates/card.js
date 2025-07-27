@@ -66,48 +66,52 @@ exports.getTistoryLogoSvg = () => `
    </svg>
 `;
 
-exports.getTagsSvg = (tags) => `
-  <g transform="translate(20,70)" >
-    <svg id="tagSvg" width="600" height="100"></svg>
-  </g>
-  <script>
-  const svg = document.getElementById("tagSvg");
-  const tags = ${JSON.stringify(tags)};
-
-  let xPos = 0; 
+exports.getTagsSvg = (tags) => {
+  const fontSize = 10;
+  const horizontalPadding = 16;
+  const spacing = 10;
   const y = 15;
-  const height = 20;
-  const fontSize = 8;
-  const padding = 20; 
-  const spacing = 10; 
+  const height = 22;
 
-  tags.forEach((tagText, index) => {
-    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("y", y + 13);
-    text.setAttribute("font-size", fontSize);
-    text.setAttribute("fill", "#000");
-    text.textContent = tagText;
-    svg.appendChild(text);
+  const tagElements = tags.map((tagText) => {
+    const approxLength = tagText
+      .split('')
+      .reduce((sum, char) => sum + (/[가-힣]/.test(char) ? 1 : 0.6), 0);
+    const textWidth = approxLength * fontSize;
+    const rectWidth = textWidth + horizontalPadding;
 
-    text.setAttribute("x", 0);
-    const textLength = text.getComputedTextLength();
+    return { tagText, rectWidth };
+  });
 
-    const rectWidth = textLength + padding;
+  let xPos = 0;
+  let tagSvg = `<g transform="translate(20,70)">`;
 
-    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("x", xPos);
-    rect.setAttribute("y", y);
-    rect.setAttribute("rx", 6);
-    rect.setAttribute("height", height);
-    rect.setAttribute("width", rectWidth);
-    rect.setAttribute("stroke", "#EB531F");
-    rect.setAttribute("stroke-width", "0.5");
-    rect.setAttribute("fill", "none");
-    svg.appendChild(rect);
-
-    text.setAttribute("x", xPos + 10); 
+  tagElements.forEach(({ tagText, rectWidth }) => {
+    const textX = xPos + rectWidth / 2;
+    tagSvg += `
+      <rect
+        x="${xPos}"
+        y="${y}"
+        rx="6"
+        height="${height}"
+        width="${rectWidth}"
+        stroke="#EB531F"
+        stroke-width="0.5"
+        fill="none"
+      />
+      <text
+        x="${textX}"
+        y="${y + 14}"
+        font-size="${fontSize}"
+        fill="#000"
+        font-family="Pretendard-Regular, sans-serif"
+        text-anchor="middle"
+      >${tagText}</text>
+    `;
 
     xPos += rectWidth + spacing;
   });
-</script>
-`;
+
+  tagSvg += `</g>`;
+  return tagSvg;
+};
