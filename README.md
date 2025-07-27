@@ -29,7 +29,9 @@ GET /api/post?name=your-blog-name
 
 ## Example Output
 
-[![example card](https://tistory-post-card.vercel.app/api/post?name=iot624)](https://iot624.tistory.com)
+[![example light card](https://tistory-post-card.vercel.app/api/post?name=iot624&theme=light)](https://iot624.tistory.com)
+
+[![example dark card](https://tistory-post-card.vercel.app/api/post?name=iot624&theme=dark)](https://iot624.tistory.com)
 
 ## Getting Started
 
@@ -58,16 +60,14 @@ The server will start on [http://localhost:8000](http://localhost:8000).
 
 - `GET /api/post?name={tistory_blog_name}&theme={theme}`  
   Returns an SVG card for the latest post of the specified Tistory blog.
-  - `theme` (optional): `light`, `dark`, or `auto` (default: `auto`).
-    - `auto`: The card automatically adapts to the user's browser dark mode setting using CSS media queries.
-    - `dark`: Forces dark mode (white text).
-    - `light`: Forces light mode (black text).
+  - `theme` (optional): `light`, `dark`. (default: `light`).
+    - `dark`: Dark background (white text).
+    - `light`: Light background (black text).
 
 ## Theme Support
 
 You can control the color theme of the SVG card using the `theme` query parameter:
 
-- `theme=auto` (default): The card will automatically detect and follow the user's browser dark mode preference. Text and tag colors will switch between black and white accordingly.
 - `theme=dark`: The card will always use dark mode (white text).
 - `theme=light`: The card will always use light mode (black text).
 
