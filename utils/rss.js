@@ -8,7 +8,7 @@ exports.parseRss = async (url) => {
 
   const recentPost = content?.items[0];
   const tags = recentPost?.categories;
-
+  console.log(`rss tags ====`, tags);
   return {
     blogTitle: content?.title,
     description: content?.description,
